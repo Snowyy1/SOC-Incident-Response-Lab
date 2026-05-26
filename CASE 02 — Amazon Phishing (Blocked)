@@ -1,0 +1,58 @@
+# Incident Report – Case 02: Amazon Delivery Phishing Email
+
+## Time of Activity
+05/25/2026 02:33:48.320
+
+---
+
+## Summary
+A phishing email impersonating Amazon delivery services attempted to redirect the user to a shortened malicious URL. Firewall logs confirmed the connection attempt was blocked.
+
+---
+
+## Affected Entities
+- Sender: urgents@amazon.biz
+- Recipient: h.harris@thetrydaily.thm
+- URL: http://bit.ly/3sHkX3da12340
+- Destination IP: 67.199.248.11
+- Source IP: 10.20.2.17
+
+---
+
+## Investigation Steps
+- Searched email logs for sender reputation
+- Validated absence of legitimate Amazon purchase history
+- Checked VirusTotal reputation (1/92 malicious flag)
+- Correlated firewall logs for URL access attempt
+
+---
+
+## Key Findings
+- Fake Amazon domain used (amazon.biz)
+- URL shortening service used for obfuscation
+- Connection attempt blocked by firewall policy
+- No endpoint execution observed
+
+---
+
+## Conclusion
+True Positive – phishing attempt blocked at network layer
+
+---
+
+## Escalation Decision
+No escalation required (blocked at perimeter)
+
+---
+
+## Remediation Actions
+- Block sender domain
+- Add URL to threat intel blacklist
+- User awareness training on phishing links
+
+---
+
+## Indicators of Compromise (IOCs)
+- bit.ly link
+- amazon.biz domain
+- 67.199.248.11
