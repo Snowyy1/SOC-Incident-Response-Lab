@@ -144,4 +144,4 @@ This repository is based on simulated SOC scenarios for educational and portfoli
 
 ## 📬 Contact
 
-Open to SOC Analyst / Cybersecurit
+Open to SOC Analyst / Cybersecurity
