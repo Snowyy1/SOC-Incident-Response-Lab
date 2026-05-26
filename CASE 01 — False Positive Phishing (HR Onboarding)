@@ -1,0 +1,58 @@
+# Incident Report – Case 01: HR Onboarding Phishing Email (False Positive)
+
+## Time of Activity
+05/25/2026 02:30:35.320
+
+---
+
+## Summary
+An inbound email was flagged due to an external onboarding link from a third-party HR domain. Investigation included email correlation and historical communication review to validate legitimacy.
+
+---
+
+## Affected Entities
+- Sender: onboarding@hrconnex.thm
+- Recipient: j.garcia@thetrydaily.thm
+- Domain: hrconnex.thm
+- URL: https://hrconnex.thm/onboarding/15400654060/j.garcia
+- Source IP (web access): 10.20.2.17 / 67.199.248.11
+
+---
+
+## Investigation Steps
+- Checked SIEM email logs for related communication
+- Correlated internal HR onboarding threads
+- Reviewed firewall logs for URL access attempts
+- Checked threat intelligence reputation for domain and URL
+
+---
+
+## Key Findings
+- Internal email confirmed HR onboarding process reference
+- No malicious execution or endpoint compromise
+- URL categorized as low risk in threat intelligence (1/92 detection)
+- Firewall blocked outbound access attempt
+
+---
+
+## Conclusion
+False Positive – legitimate onboarding workflow with external HR provider
+
+---
+
+## Escalation Decision
+No escalation required
+
+---
+
+## Remediation Actions
+- No isolation required
+- Continue monitoring for phishing patterns
+- User awareness recommended for external onboarding links
+
+---
+
+## Indicators of Compromise (IOCs)
+- hrconnex.thm
+- onboarding email link
+- 67.199.248.11
