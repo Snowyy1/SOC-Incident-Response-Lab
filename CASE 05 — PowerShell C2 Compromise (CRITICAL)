@@ -1,0 +1,197 @@
+# Incident Report – Case 05: PowerShell-Based C2 Execution & Endpoint Compromise
+
+## Time of Activity
+05/26/2026 03:03:26.821 – 03:07:48.821
+
+---
+
+## Executive Summary
+A confirmed endpoint compromise was identified on host **win-3450** involving execution of a PowerShell-based attack chain. The activity included:
+
+- Malicious script execution via PowerShell IEX download cradle
+- Remote script retrieval from GitHub (known offensive security toolkit)
+- Execution of Powercat for reverse shell capability
+- Connection to external command-and-control (C2) infrastructure via ngrok
+- Evidence of staging and potential data exfiltration activity
+
+This represents an active compromise with remote attacker control over the endpoint.
+
+---
+
+## Affected Entities
+
+### Endpoint
+- Host: win-3450
+- User context: michael.ascot
+- Parent process: explorer.exe (PID: 3180)
+
+### Processes
+- powershell.exe (PID: 3880)
+- powershell.exe (PID: 3728)
+- powercat (executed in-memory)
+- iex (Invoke-Expression usage)
+
+### Network Infrastructure
+- raw.githubusercontent.com (185.199.108.133–111.133)
+- 2.tcp.ngrok.io (3.22.53.161)
+
+### Files Created
+- C:\Users\michael.ascot\Downloads\PowerView.ps1
+- C:\Users\michael.ascot\Downloads\exfiltration\
+- C:\Users\michael.ascot\Downloads\exfiltration\exfilt8me.zip
+- Temporary PowerShell policy test scripts:
+  - __PSScriptPolicyTest_*.ps1
+
+---
+
+## Attack Timeline Reconstruction
+
+### Step 1 — Initial Execution
+PowerShell was launched from user context via Explorer:
+
+🔴 Key observation:
+- Use of `IEX` (Invoke-Expression) indicates fileless execution
+- Remote script download from GitHub used to bypass local defenses
+
+---
+
+### Step 2 — External Script Retrieval
+
+DNS resolution observed:
+
+- raw.githubusercontent.com → 185.199.108.133–111.133
+- 2.tcp.ngrok.io → 3.22.53.161
+
+This confirms:
+- External script staging
+- Attacker-controlled infrastructure communication
+
+---
+
+### Step 3 — Reverse Shell Establishment
+
+Powercat executed with parameters:
+
+- Host: 2.tcp.ngrok.io
+- Port: 19282
+- Payload: -e powershell
+
+🔴 Result:
+- Reverse TCP shell established
+- Attacker gained interactive PowerShell session
+
+---
+
+### Step 4 — Post Exploitation Activity
+
+Observed file creation activity:
+
+- PowerView.ps1 downloaded → indicates enumeration phase
+- Temporary script execution artifacts in AppData\Local\Temp
+- Directory created: Downloads\exfiltration\
+- Archive created: exfilt8me.zip
+
+🔴 Interpretation:
+- PowerView suggests Active Directory / system enumeration
+- Zip archive indicates data staging for exfiltration
+
+---
+
+## Key Findings
+
+### High Confidence Indicators
+- Fileless PowerShell execution via IEX
+- External script download from GitHub (living-off-the-land technique)
+- Reverse shell via Powercat
+- ngrok tunnel used for C2 bypassing firewall inspection
+- Evidence of staged data collection (ZIP archive creation)
+
+### Behavioral Indicators
+- Multiple PowerShell child processes spawned
+- Temporary script execution artifacts (__PSScriptPolicyTest_*)
+- DNS queries to known tunneling service (ngrok)
+- Execution from user Desktop context (not system process)
+
+---
+
+## MITRE ATT&CK Mapping
+
+| Technique | ID | Description |
+|----------|----|-------------|
+| Command and Scripting Interpreter: PowerShell | T1059.001 | Malicious PowerShell execution |
+| Ingress Tool Transfer | T1105 | Downloading scripts from GitHub |
+| Obfuscated Files or Information | T1027 | Fileless execution via IEX |
+| Exfiltration Over C2 Channel | T1041 | ngrok reverse shell |
+| Command and Control | T1071.001 | Web-based C2 communication |
+
+---
+
+## Impact Assessment
+
+- Endpoint compromise confirmed
+- Remote attacker control established
+- Potential credential access and lateral movement risk
+- Data staging activity observed (possible exfiltration preparation)
+
+---
+
+## Escalation Decision
+YES — Immediate escalation required
+
+Reason:
+- Active C2 channel established
+- Remote code execution confirmed
+- Evidence of post-exploitation tooling (PowerView)
+- Data staging observed
+
+---
+
+## Recommended Remediation Actions
+
+### Immediate Actions
+- Isolate host win-3450 from the network
+- Terminate all PowerShell processes
+- Block:
+  - raw.githubusercontent.com (if not required)
+  - 2.tcp.ngrok.io
+- Disable compromised user session (michael.ascot)
+
+---
+
+### Investigation Actions
+- Memory dump acquisition for forensic analysis
+- Review authentication logs for lateral movement
+- Search for persistence mechanisms (scheduled tasks, registry run keys)
+- Check for credential dumping tools execution
+
+---
+
+### Hardening Actions
+- Restrict PowerShell execution policy (Constrained Language Mode)
+- Block unsigned script execution
+- Monitor for IEX usage in SIEM
+- Implement domain-based script allowlisting
+
+---
+
+## Indicators of Compromise (IOCs)
+
+### Domains
+- raw.githubusercontent.com
+- 2.tcp.ngrok.io
+
+### Files
+- PowerView.ps1
+- powercat.ps1
+- exfilt8me.zip
+- __PSScriptPolicyTest_*.ps1
+
+### Behavioral
+- PowerShell IEX download cradle
+- Reverse shell via TCP 19282
+- DNS queries to ngrok infrastructure
+
+---
+
+## Final Verdict
+**CONFIRMED COMPROMISE – ACTIVE REMOTE CONTROL ESTABLISHED**
