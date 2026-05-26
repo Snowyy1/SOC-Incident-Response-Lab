@@ -1,0 +1,61 @@
+# Incident Report – Case 04: Windows Process Anomaly Investigation
+
+## Time of Activity
+05/26/2026 (multiple timestamps)
+
+---
+
+## Summary
+Multiple Sysmon alerts flagged unusual parent-child process relationships across Windows system processes. Investigation confirmed all were legitimate OS behavior.
+
+---
+
+## Affected Entities
+- Hosts: win-3450, win-3451, win-3455
+- Processes:
+  - taskhostw.exe
+  - rdpclip.exe
+  - WUDFHost.exe
+- Parents:
+  - svchost.exe
+  - services.exe
+
+---
+
+## Investigation Steps
+- Checked process execution frequency
+- Validated system file paths
+- Correlated absence of malicious child processes
+- Reviewed registry and persistence indicators
+
+---
+
+## Key Findings
+- All binaries located in legitimate system directories
+- No malicious child process execution
+- No persistence or network anomalies
+- Events match normal Windows service behavior
+
+---
+
+## Conclusion
+False Positive – system process noise / detection rule tuning issue
+
+---
+
+## Escalation Decision
+No escalation required
+
+---
+
+## Remediation Actions
+- Tune detection rules for system processes
+- Reduce noise from trusted Windows binaries
+- Maintain baseline process whitelist
+
+---
+
+## Indicators of Interest
+- rdpclip.exe
+- taskhostw.exe
+- WUDFHost.exe
