@@ -1,0 +1,57 @@
+# Incident Report – Case 03: Microsoft Account Phishing (Allowed Access)
+
+## Time of Activity
+05/25/2026 02:36:06.320
+
+---
+
+## Summary
+A phishing email impersonating Microsoft security was successfully delivered and the malicious URL was accessed via firewall-allowed connection.
+
+---
+
+## Affected Entities
+- Sender: no-reply@m1crosoftsupport.co
+- Recipient: c.allen@thetrydaily.thm
+- URL: https://m1crosoftsupport.co/login
+- IP: 45.148.10.131
+
+---
+
+## Investigation Steps
+- Checked domain reputation (typosquatted Microsoft domain)
+- Correlated firewall logs for access confirmation
+- Verified no credential submission or POST requests
+- Reviewed browsing activity context
+
+---
+
+## Key Findings
+- Typosquatted domain detected
+- URL flagged malicious (1/93 vendors)
+- Connection allowed but no further exploitation observed
+- No credential exfiltration detected
+
+---
+
+## Conclusion
+True Positive – phishing access attempt with no compromise
+
+---
+
+## Escalation Decision
+Yes – due to successful access (not blocked)
+
+---
+
+## Remediation Actions
+- Block domain at DNS/firewall
+- User phishing awareness alert
+- Monitor host for credential abuse attempts
+
+---
+
+## Indicators of Compromise (IOCs)
+- m1crosoftsupport.co
+- 45.148.10.131
+- phishing login page
