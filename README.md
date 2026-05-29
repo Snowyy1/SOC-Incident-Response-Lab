@@ -142,5 +142,3 @@ Each case represents a real SOC-style investigation with structured analysis, fi
 
 This repository is based on simulated SOC scenarios for educational and portfolio purposes provided by THM. All data is structured for cybersecurity training and demonstration.
 
-
-Open to SOC Analyst / Cybersec
